@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>MapGen Object Test</h1>
+<p id="Time"></p>
+<canvas id="bigMap" width="1024" height="1024"></canvas>
+
+<script src="MapGen.js"></script>
+<script>
+    var counter = 0;
+    var totalTimeGeneration = Date.now() - Date.now();
+	var MapGenerator = new MapGen();
+	MapGenerator.SetSeed(56);
+    
+    var canva = document.getElementById("bigMap");
+	var context = canva.getContext("2d");
+    for (i = 0; i < canva.width / MapGenerator.MAPSIZE; i++) {
+		for (j = 0; j < canva.height / MapGenerator.MAPSIZE; j++) {
+            var time = Date.now();
+            var map = MapGenerator.GetMap(i, j);
+            time = Date.now() - time;
+            totalTimeGeneration += time;
+            counter ++;
+			for (x = 0; x < MapGenerator.MAPSIZE; x++) {
+                for (y = 0; y < MapGenerator.MAPSIZE; y++) {
+                    var color = ("0" + map[x][y].toString(16)).slice(-2);
+                    context.fillStyle = "#" + color + color + color;
+                    context.fillRect(i * MapGenerator.MAPSIZE + x, j * MapGenerator.MAPSIZE + y, 1, 1);
+                }
+            }
+		}
+	}
+    document.getElementById("Time").innerHTML = counter + " maps of size " + MapGenerator.MAPSIZE + " generated in " + totalTimeGeneration + " ms. (" + (totalTimeGeneration / counter) + " ms by map)";
+</script>
+
+</body>
+</html> 
