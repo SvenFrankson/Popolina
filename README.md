@@ -7,7 +7,7 @@ Node.js server, generates huge procedural heightmap
 
 ### Install node.js
 ### Install mongoDB
-### Launch npm install
+### Run npm install
 ### Run server
 ### Install Unity3D
 ### Open client project
