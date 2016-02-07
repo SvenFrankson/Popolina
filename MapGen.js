@@ -4,8 +4,8 @@ module.exports = {
         this.MINMAPDEGREE = 3;
         this.MAPSIZEDEGREE = 5;
         this.MAPSIZE = Math.pow(2, this.MAPSIZEDEGREE);
-        this.MAXMAPDEGREE = 11;
-        this.MAPHEIGHT = 255;
+        this.MAXMAPDEGREE = 12;
+        this.MAPHEIGHT = 1023;
 
         var setSeed = function (seed) {
                 var i = 0, x = 0, randomNumbers = [];

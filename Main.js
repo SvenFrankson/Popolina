@@ -1,8 +1,20 @@
+/*jslint node: true*/
+
 var express = require('express'),
+    mongoose = require('mongoose'),
     app = express(),
     chunckManager = require('./ChunckManager.js'),
-    ChunckManager = new chunckManager.ChunckManager();
+    ChunckManager = new chunckManager.ChunckManager(),
+    brickManager = require('./BrickManager.js'),
+    BrickManager = new brickManager.BrickManager();
 
+        
+mongoose.connect('mongodb://localhost/popolina', function (err) {
+    "use strict";
+    if (err) {
+        throw err;
+    }
+});
 
 app.get("/", function (req, res) {
     "use strict";
@@ -14,15 +26,37 @@ app.get("/maps/:iPos/:jPos", function (req, res) {
     "use strict";
     var i,
         iPos = req.params.iPos,
-        jPos = req.params.jPos,
-        chunck,
-        responseString;
+        jPos = req.params.jPos;
     
     iPos = parseInt(iPos, 10);
     jPos = parseInt(jPos, 10);
     
-    chunck = ChunckManager.getChunck(iPos, jPos, function (chunck) {
+    ChunckManager.getChunck(iPos, jPos, function (chunck) {
         res.send(chunck);
+    });
+});
+
+app.get("/moveTile/:iPos/:jPos/:i/:j/:step", function (req, res) {
+    "use strict";
+    var i = req.params.i,
+        j = req.params.j,
+        iPos = req.params.iPos,
+        jPos = req.params.jPos,
+        step = req.params.step;
+    
+    i = parseInt(i, 10);
+    j = parseInt(j, 10);
+    iPos = parseInt(iPos, 10);
+    jPos = parseInt(jPos, 10);
+    ChunckManager.moveTile(iPos, jPos, i, j, step);
+});
+
+app.get("/bricks/:ref", function (req, res) {
+    "use strict";
+    var ref = req.params.ref;
+    
+    BrickManager.getBrick(ref, function (brick) {
+        res.send(brick);
     });
 });
 

@@ -1,24 +1,28 @@
+/*jslint node: true */
+
 module.exports = {
     ChunckManager : function () {
         "use strict";
         var map = require('./MapGen.js'),
-            mapBuilder = new map.MapGenerator(42),
+            mapBuilder = new map.MapGenerator(4242),
             mongoose = require('mongoose'),
             chunckDataSchema = new mongoose.Schema({
                 iPos : Number,
                 jPos : Number,
-                map : [Number]
+                map : [Number],
+                blocks : [{
+                    iPos : Number,
+                    jPos : Number,
+                    kPos : Number,
+                    dir : Number,
+                    reference : String
+                }]
             });
-        
-        mongoose.connect('mongodb://localhost/popolina', function (err) {
-            if (err) {
-                throw err;
-            }
-        });
         
         this.getChunck = function (iPos, jPos, callback) {
             var i,
                 newChunck,
+                newBlock1 = {},
                 ChunckDataModel = mongoose.model('chunckData', chunckDataSchema),
                 query = ChunckDataModel.find(null);
             
@@ -33,6 +37,13 @@ module.exports = {
                     newChunck.iPos = iPos;
                     newChunck.jPos = jPos;
                     newChunck.map = mapBuilder.getMap(iPos, jPos);
+                    newChunck.blocks = [];
+                    newBlock1.iPos = 6;
+                    newBlock1.jPos = 6;
+                    newBlock1.kPos = newChunck.map[6 + 6 * 32];
+                    newBlock1.dir = 0;
+                    newBlock1.reference = "cube";
+                    newChunck.blocks.push(newBlock1);
                     return newChunck.save(function (err) {
                         if (err) {
                             throw err;
@@ -42,6 +53,23 @@ module.exports = {
                 } else {
                     callback(comms[0]);
                 }
+            });
+        };
+        
+        this.moveTile = function (iPos, jPos, i, j, step) {
+            var ChunckDataModel = mongoose.model('chunckData', chunckDataSchema);
+            ChunckDataModel.findOne({ 'iPos' : iPos, 'jPos' : jPos}, function (err, doc) {
+                if (err) {
+                    throw err;
+                }
+                var newMap = doc.map.slice();
+                newMap[i + 32 * j] += step;
+                doc.map = newMap;
+                doc.save(function (err) {
+                    if (err) {
+                        throw err;
+                    }
+                });
             });
         };
     }
