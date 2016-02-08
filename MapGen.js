@@ -1,3 +1,5 @@
+/*jslint node: true */
+
 module.exports = {
     MapGenerator: function (seed) {
         "use strict";
@@ -89,8 +91,8 @@ module.exports = {
             var step = Math.pow(2, degree),
                 xPos = iPos * this.MAPSIZE,
                 yPos = jPos * this.MAPSIZE,
-                x0 = xPos - (xPos % step),
-                y0 = yPos - (yPos % step),
+                x0 = Math.abs(xPos) - (Math.abs(xPos) % step),
+                y0 = Math.abs(yPos) - (Math.abs(yPos) % step),
                 val,
                 values = [],
                 map = [],
@@ -98,6 +100,14 @@ module.exports = {
                 dy,
                 i,
                 j;
+            
+            if (xPos < 0) {
+                x0 = -x0 - step;
+            }
+            
+            if (yPos < 0) {
+                y0 = -y0 - step;
+            }
 
             for (i = 0; i < 4; i += 1) {
                 values[i] = [];

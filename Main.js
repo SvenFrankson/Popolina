@@ -36,19 +36,24 @@ app.get("/maps/:iPos/:jPos", function (req, res) {
     });
 });
 
-app.get("/moveTile/:iPos/:jPos/:i/:j/:step", function (req, res) {
+app.post("/levelTile/:iPos/:jPos/:i/:j/:step/:size", function (req, res) {
     "use strict";
     var i = req.params.i,
         j = req.params.j,
         iPos = req.params.iPos,
         jPos = req.params.jPos,
-        step = req.params.step;
+        step = req.params.step,
+        size = req.params.size;
     
     i = parseInt(i, 10);
     j = parseInt(j, 10);
     iPos = parseInt(iPos, 10);
     jPos = parseInt(jPos, 10);
-    ChunckManager.moveTile(iPos, jPos, i, j, step);
+    step = parseInt(step, 10);
+    size = parseInt(size, 10);
+    ChunckManager.levelTile(iPos, jPos, i, j, step, size, function (chunck) {
+        res.send(chunck);
+    });
 });
 
 app.get("/bricks/:ref", function (req, res) {
