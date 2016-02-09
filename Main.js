@@ -2,6 +2,7 @@
 
 var express = require('express'),
     mongoose = require('mongoose'),
+    bodyParser = require('body-parser'),
     app = express(),
     chunckManager = require('./ChunckManager.js'),
     ChunckManager = new chunckManager.ChunckManager(),
@@ -15,6 +16,8 @@ mongoose.connect('mongodb://localhost/popolina', function (err) {
         throw err;
     }
 });
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get("/", function (req, res) {
     "use strict";
@@ -36,14 +39,14 @@ app.get("/maps/:iPos/:jPos", function (req, res) {
     });
 });
 
-app.post("/levelTile/:iPos/:jPos/:i/:j/:step/:size", function (req, res) {
+app.post("/levelTile", function (req, res) {
     "use strict";
-    var i = req.params.i,
-        j = req.params.j,
-        iPos = req.params.iPos,
-        jPos = req.params.jPos,
-        step = req.params.step,
-        size = req.params.size;
+    var i = req.body.i,
+        j = req.body.j,
+        iPos = req.body.iPos,
+        jPos = req.body.jPos,
+        step = req.body.step,
+        size = req.body.size;
     
     i = parseInt(i, 10);
     j = parseInt(j, 10);
