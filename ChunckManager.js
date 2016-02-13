@@ -56,7 +56,7 @@ module.exports = {
             });
         };
         
-        this.addBlock = function (iPos, jPos, reference, i, j, k, d, callback) {
+        this.addBlock = function (iPos, jPos, reference, texture, i, j, k, d, callback) {
             ChunckModel.getChunckByPos(iPos, jPos, function (err, chunck) {
                 if (err) {
                     throw err;
@@ -66,6 +66,7 @@ module.exports = {
                 } else {
                     var block = {};
                     block.reference = reference;
+                    block.texture = texture;
                     block.iPos = i;
                     block.jPos = j;
                     block.kPos = k;

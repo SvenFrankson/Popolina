@@ -4,6 +4,7 @@ var mongoose = require('mongoose'),
     brickDataSchema = new mongoose.Schema({
         reference : String,
         vertices : [Number],
+        uvs : [Number],
         triangles : [Number]
     });
 

@@ -10,7 +10,8 @@ var mongoose = require('mongoose'),
             jPos : Number,
             kPos : Number,
             dir : Number,
-            reference : String
+            reference : String,
+            texture : String
         }]
     });
 

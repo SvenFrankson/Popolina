@@ -18,6 +18,7 @@ mongoose.connect('mongodb://localhost/popolina', function (err) {
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.static(__dirname + '/public'));
 
 app.get("/", function (req, res) {
     "use strict";
@@ -66,7 +67,8 @@ app.post("/addBlock", function (req, res) {
         d = req.body.d,
         iPos = req.body.iPos,
         jPos = req.body.jPos,
-        reference = req.body.reference;
+        reference = req.body.reference,
+        texture = req.body.texture;
     
     i = parseInt(i, 10);
     j = parseInt(j, 10);
@@ -75,7 +77,7 @@ app.post("/addBlock", function (req, res) {
     iPos = parseInt(iPos, 10);
     jPos = parseInt(jPos, 10);
     
-    ChunckManager.addBlock(iPos, jPos, reference, i, j, k, d, function (chunck) {
+    ChunckManager.addBlock(iPos, jPos, reference, texture, i, j, k, d, function (chunck) {
         res.send(chunck);
     });
 });
