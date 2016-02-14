@@ -82,6 +82,28 @@ app.post("/addBlock", function (req, res) {
     });
 });
 
+app.post("/addTemplate", function (req, res) {
+    "use strict";
+    var i = req.body.i,
+        j = req.body.j,
+        k = req.body.k,
+        d = req.body.d,
+        iPos = req.body.iPos,
+        jPos = req.body.jPos,
+        reference = req.body.reference;
+    
+    i = parseInt(i, 10);
+    j = parseInt(j, 10);
+    k = parseInt(k, 10);
+    d = parseInt(d, 10);
+    iPos = parseInt(iPos, 10);
+    jPos = parseInt(jPos, 10);
+    
+    ChunckManager.addTemplate(iPos, jPos, reference, i, j, k, d, function (chunck) {
+        res.send(chunck);
+    });
+});
+
 app.get("/bricks/:ref", function (req, res) {
     "use strict";
     var ref = req.params.ref;

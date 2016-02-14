@@ -6,7 +6,8 @@ module.exports = {
         var map = require('./MapGen.js'),
             mapBuilder = new map.MapGenerator(4242),
             models = require('./models'),
-            ChunckModel = models.Chunck;
+            ChunckModel = models.Chunck,
+            TemplateModel = models.Template;
             
         
         this.getChunck = function (iPos, jPos, callback) {
@@ -77,6 +78,43 @@ module.exports = {
                             throw err;
                         }
                         callback(chunck);
+                    });
+                }
+            });
+        };
+        
+        this.addTemplate = function (iPos, jPos, reference, i, j, k, d, callback) {
+            ChunckModel.getChunckByPos(iPos, jPos, function (err, chunck) {
+                if (err) {
+                    throw err;
+                } else if (chunck === null) {
+                    return;
+                } else {
+                    TemplateModel.getTemplateByReference(reference, function (err, template) {
+                        if (err) {
+                            throw err;
+                        } else if (template === null) {
+                            return;
+                        } else {
+                            var n = 0;
+                            for (n = 0; n < template.blocks.length; n += 1) {
+                                var block = {};
+                                block.reference = template.blocks[n].reference;
+                                block.texture = template.blocks[n].texture;
+                                block.iPos = template.blocks[n].iPos + i;
+                                block.jPos = template.blocks[n].jPos + j;
+                                block.kPos = template.blocks[n].kPos + k;
+                                block.dir = template.blocks[n].dir;
+                                console.log(block);
+                                chunck.blocks.push(block);
+                            }
+                            chunck.save(function (err) {
+                                if (err) {
+                                    throw err;
+                                }
+                                callback(chunck);
+                            });
+                        }
                     });
                 }
             });
