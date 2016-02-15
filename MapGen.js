@@ -144,9 +144,9 @@ module.exports = {
 
             for (i = 0; i < this.MAPSIZE; i += 1) {
                 for (j = 0; j < this.MAPSIZE; j += 1) {
-                    map[i + j * this.MAPSIZE] = 0;
+                    map[i + j * this.MAPSIZE] = this.MAPHEIGHT / 2;
                     for (d = this.MINMAPDEGREE; d < this.MAXMAPDEGREE; d += 1) {
-                        map[i + j * this.MAPSIZE] += maps[d][i][j] / Math.pow(2, this.MAXMAPDEGREE - d) * this.MAPHEIGHT;
+                        map[i + j * this.MAPSIZE] += (maps[d][i][j] - 0.5) / Math.pow(2, this.MAXMAPDEGREE - d) * this.MAPHEIGHT;
                     }
                     map[i + j * this.MAPSIZE] = Math.floor(map[i + j * this.MAPSIZE]);
                 }
